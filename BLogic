@@ -1,0 +1,39 @@
+ public class SampleBL
+    {
+        string connectionString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=Actual;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
+        public DataTable GetData(string tableName, string columnNames = "*")
+        {
+            try
+            {
+                DataSet ds = new DataSet();
+                using (SqlConnection sqlConnection = new SqlConnection(connectionString))
+                {
+                    sqlConnection.Open();
+                    SqlCommand sqlCommand = new SqlCommand();
+                    sqlCommand.Connection = sqlConnection;
+                    sqlCommand.CommandText = "GetData";
+                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+
+                    SqlParameter sqlParameter1 = new SqlParameter();
+                    sqlParameter1.ParameterName = "@tname";
+                    sqlParameter1.Value = tableName; //"User";
+                    SqlParameter sqlParameter2 = new SqlParameter();
+                    sqlParameter2.ParameterName =  "@cnames";
+                    sqlParameter2.Value = columnNames;// "*";//"FirstName,LastName";
+
+                    sqlCommand.Parameters.Add(sqlParameter1);
+                    sqlCommand.Parameters.Add(sqlParameter2);
+                    SqlDataAdapter da = new SqlDataAdapter(sqlCommand);
+                    da.Fill(ds);
+                    sqlConnection.Close();
+                    return ds.Tables[0];
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+           
+        }
+    }
