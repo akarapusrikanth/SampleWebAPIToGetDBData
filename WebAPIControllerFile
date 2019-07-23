@@ -1,10 +1,23 @@
- // GET api/values
-        public string GetData()
+ // GET api/values/5
+        [Route("api/values/{tname}")]
+        public string Get(string tname)
         {
             SampleBL.SampleBL sampleBL = new SampleBL.SampleBL();
 
             string JSONString = string.Empty;
-            DataTable dt = sampleBL.GetData();
+            DataTable dt = sampleBL.GetData(tname);
+            if (dt != null)
+                JSONString = JsonConvert.SerializeObject(dt);
+            return JSONString;
+        }
+
+        [Route("api/values/{tname}/{cname}")]
+        public string Get(string  tname, string cname)
+        {
+            SampleBL.SampleBL sampleBL = new SampleBL.SampleBL();
+
+            string JSONString = string.Empty;
+            DataTable dt =  sampleBL.GetData(tname, cname);
             if (dt != null)
                 JSONString = JsonConvert.SerializeObject(dt);
             return JSONString;
