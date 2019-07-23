@@ -1,0 +1,11 @@
+ // GET api/values
+        public string GetData()
+        {
+            SampleBL.SampleBL sampleBL = new SampleBL.SampleBL();
+
+            string JSONString = string.Empty;
+            DataTable dt = sampleBL.GetData();
+            if (dt != null)
+                JSONString = JsonConvert.SerializeObject(dt);
+            return JSONString;
+        }
