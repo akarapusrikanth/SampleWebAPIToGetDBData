@@ -1,0 +1,29 @@
+
+create Procedure GetData --'Project'
+@tname varchar(255),
+@cnames varchar(max)
+As 
+Begin
+DECLARE @retvalue int   
+DECLARE @SQLTableExists nvarchar(500), @SQLString nvarchar(500)
+DECLARE @parameter nvarchar(500);
+
+SELECT @SQLTableExists = 'SELECT @outputReturnValue = 1 FROM sys.objects where name ='''+ @tname+'''';  
+SET @parameter = '@outputReturnValue int OUTPUT';
+
+EXEC sp_executesql @SQLTableExists, @parameter, @outputReturnValue=@retvalue OUTPUT;
+
+if(isNull(@retvalue,0)!=1)
+Begin
+return 
+End
+
+SET @SQLString = 'select '+@cnames+' from [' + @tname +'] (nolock)'
+
+EXECUTE sp_executesql @SQLString
+
+End
+
+Go
+
+--GetData 'User', 'FirstName,LastName'
